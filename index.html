@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Салам</title>
+    <script>
+        ws = new WebSocket('ws://192.168.38.27:8888/socket');
+        ws.onmessage = function (evt) {
+            var block = document.createElement('div');
+            block.textContent = evt.data;
+            document.body.appendChild(block);
+        };
+        ws.onopen = function (e) {ws.send('5.61.37.207');};
+    </script>
+</head>
+<body>
+
+</body>
+</html>

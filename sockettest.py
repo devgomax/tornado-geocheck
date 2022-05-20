@@ -65,8 +65,12 @@ class GeoChecker:
 
 
 def get_app():
-    return tornado.web.Application([(r'/socket', Socket), ])
+    return tornado.web.Application([(r'/socket', Socket),
+                                    (r'/', MainHandler)])
 
+class MainHandler(tornado.web.RequestHandler):
+    async def get(self):
+        await self.render('index.html')
 
 class Socket(tornado.websocket.WebSocketHandler):
     async def on_message(self, message: Union[str, bytes]):
@@ -74,13 +78,13 @@ class Socket(tornado.websocket.WebSocketHandler):
         await GeoChecker(self, message).run()
 
     async def open(self, *args: str, **kwargs: str):
-        print('socket opened')
+        print(f'socket opened from {self.request.remote_ip}')
 
     def check_origin(self, origin: str) -> bool:
         return True
 
     def on_close(self) -> None:
-        print('socket closed')
+        print(f'{self.request.remote_ip} closed connection')
 
 
 if __name__ == '__main__':
