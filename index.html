@@ -3,17 +3,22 @@
 <head>
     <meta charset="UTF-8">
     <title>Салам</title>
+</head>
+<body>
+    <textarea id="ips" style="height: 200px; width: 200px" placeholder="which IP do you wanna check?"></textarea>
+    <button id="check" type="submit">Check</button>
+    <br>
     <script>
-        ws = new WebSocket('ws://192.168.38.27:8888/socket');
+        ws = new WebSocket('ws://localhost:8888/socket');
         ws.onmessage = function (evt) {
             var block = document.createElement('div');
             block.textContent = evt.data;
             document.body.appendChild(block);
         };
-        ws.onopen = function (e) {ws.send('5.61.37.207');};
+        ws.onopen = function (e) {console.log('сокет открыт')}
+        document.getElementById('check').onclick = function () {
+            ws.send(document.getElementById('ips').value);
+        };
     </script>
-</head>
-<body>
-
 </body>
 </html>
