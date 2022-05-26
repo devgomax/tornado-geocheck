@@ -13,9 +13,9 @@ from utils import Utils
 
 
 class GeoChecker:
-    def __init__(self, socket, message):
+    def __init__(self, socket):
         self.ws = socket
-        self.message = message
+        self.queue = asyncio.Queue()
 
     async def task(self, browser, user_agent, ip, klass: Service.__class__):
         service = klass(browser, user_agent)
@@ -33,7 +33,7 @@ class GeoChecker:
         user_agent = await Utils.get_user_agent()
         task_args = (browser, user_agent, ip)
         await asyncio.gather(
-            *[self.task(*task_args, service) for service in services] # noqa
+            *[self.task(*task_args, service) for service in services], # noqa
         )
         await self.ws.write_message('проверка завершена')
 
@@ -48,9 +48,9 @@ class GeoChecker:
             *[asyncio.to_thread(function) for function in functions]
         )
 
-    async def run(self):
+    async def run(self, message):
         services = await asyncio.to_thread(self.get_active_services)
-        ips = [self.message]
+        ips = [ip for ip in message.split('\n') if Utils.is_ipv4(ip)]
         if not ips:
             return
         proxies = Utils.get_proxies(len(ips))
@@ -75,7 +75,7 @@ class MainHandler(tornado.web.RequestHandler):
 class Socket(tornado.websocket.WebSocketHandler):
     async def on_message(self, message: Union[str, bytes]):
         print(f'received {message=}')
-        await GeoChecker(self, message).run()
+        self.geocheck = asyncio.create_task(GeoChecker(self).run(message))
 
     async def open(self, *args: str, **kwargs: str):
         print(f'socket opened from {self.request.remote_ip}')
@@ -85,6 +85,8 @@ class Socket(tornado.websocket.WebSocketHandler):
 
     def on_close(self) -> None:
         print(f'{self.request.remote_ip} closed connection')
+        self.geocheck.cancel()
+
 
 
 if __name__ == '__main__':

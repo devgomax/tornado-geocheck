@@ -1,8 +1,8 @@
 from dataclasses import asdict
 from typing import Optional
 
-from playwright.async_api._generated import Browser, BrowserContext, Page
 from playwright._impl._api_types import TimeoutError, Error
+from playwright.async_api._generated import Browser, BrowserContext, Page
 
 from settings import (DEBUG, TIMEOUT, TO_MULTIPLIER, RETRIES_COUNT,
                       ONLY_COUNTRY_CODE)
@@ -56,14 +56,17 @@ class Service:
     async def task(self, ip):
         try:
             await self.inner_task(ip)
-        except (TimeoutError, Error) as e:
+        except TimeoutError as e:
             self.user_agent = await Utils.get_user_agent()
-            self.dictionary['status'] = '0 Connection Error'
+            self.dictionary['status'] = '0 TimeoutError'
             self.model.traits.ip = ''
             if DEBUG:
                 print(self.__class__, e)
+        except Error:
+            self.dictionary['status'] = '2 Socket Closed'
+            raise
         except Exception as exc:
-            self.dictionary['status'] = '-1 Parsing Error'
+            self.dictionary['status'] = '1 Parsing Error'
             self.model = IPModel()
             if DEBUG:
                 print(self.__class__, exc)
@@ -72,6 +75,6 @@ class Service:
             self.tries += 1
             self.timeout *= self.backoff
             self.dictionary['data'] = asdict(self.model)
-            if self.dictionary['status'] == '0 Connection Error':
+            if self.dictionary['status'] == '0 TimeoutError':
                 if self.tries <= RETRIES_COUNT:
                     await self.task(ip)
