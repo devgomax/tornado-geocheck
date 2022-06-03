@@ -1,9 +1,9 @@
 import os
 
-from models.service import Service
+from models.base_service import BaseService
 
 
-class AbstractApi(Service):
+class AbstractApi(BaseService):
     name = 'abstractapi'
 
     async def parse_data(self, data: dict):

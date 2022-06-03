@@ -1,7 +1,7 @@
-from models.service import Service
+from models.base_service import BaseService
 
 
-class DB_IP(Service):
+class DB_IP(BaseService):
     name = 'db_ip'
 
     async def parse_data(self, data: dict):

@@ -2,10 +2,10 @@ import json
 import re
 
 from locators.ipdata import Locators
-from models.service import Service
+from models.base_service import BaseService
 
 
-class IpData(Service):
+class IpData(BaseService):
     name = 'ipdata'
 
     async def parse_data(self, r_json: dict):

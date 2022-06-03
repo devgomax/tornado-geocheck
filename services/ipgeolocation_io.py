@@ -1,7 +1,7 @@
-from models.service import Service
+from models.base_service import BaseService
 
 
-class IpGeoLocation_Io(Service):
+class IpGeoLocation_Io(BaseService):
     name = 'ipgeolocation_io'
 
     async def parse_data(self, data: dict):

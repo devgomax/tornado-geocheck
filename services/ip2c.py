@@ -1,9 +1,9 @@
 from ipaddress import IPv4Address
 
-from models.service import Service
+from models.base_service import BaseService
 
 
-class Ip2C(Service):
+class Ip2C(BaseService):
     name = 'ip2c'
 
     async def parse_data(self, data: list):

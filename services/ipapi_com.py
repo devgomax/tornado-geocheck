@@ -1,7 +1,7 @@
-from models.service import Service
+from models.base_service import BaseService
 
 
-class IpApi_Com(Service):
+class IpApi_Com(BaseService):
     name = 'ipapi_com'
 
     async def parse_data(self, r_json: dict):

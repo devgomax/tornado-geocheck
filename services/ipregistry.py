@@ -1,10 +1,10 @@
 import re
 
 from locators.ipregistry import Locators
-from models.service import Service
+from models.base_service import BaseService
 
 
-class IpRegistry(Service):
+class IpRegistry(BaseService):
     name = 'ipregistry'
 
     async def parse_data(self, data: dict):

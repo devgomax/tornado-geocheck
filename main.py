@@ -5,7 +5,7 @@ import asyncio
 from dotenv import load_dotenv
 from playwright.async_api import async_playwright
 
-from models.service import Service
+from models.base_service import BaseService
 from settings import (KEY_ORDER,
                       WRITE_TO_FILE,
                       ONLY_COUNTRY_CODE,
@@ -14,7 +14,7 @@ from utils import Utils
 
 
 async def task(browser, user_agent, ip, log, console,
-               klass: Service.__class__, serv_name):
+               klass: BaseService.__class__, serv_name):
     service = klass(browser, user_agent)
     await service.task(ip)
     log[serv_name] = service.dictionary
@@ -23,7 +23,7 @@ async def task(browser, user_agent, ip, log, console,
         console['data'][serv_name]['city'] = service.model.city.en
 
 
-async def check_ip(browser, ip, services: List[Service]):
+async def check_ip(browser, ip, services: List[BaseService]):
     log_dict = {}
     console_dict = {'ip': ip,
                     'data': KEY_ORDER}
@@ -38,7 +38,7 @@ async def check_ip(browser, ip, services: List[Service]):
     print(json.dumps(console_dict, indent=2))
 
 
-def get_active_services() -> List[Service]:
+def get_active_services() -> List[BaseService]:
     all_services = Utils.get_service_subclasses()
     return [serv for serv in all_services if serv.name in KEY_ORDER.keys()] # noqa
 

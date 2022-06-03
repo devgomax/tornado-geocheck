@@ -1,10 +1,10 @@
 import pycountry
 
 from locators.two_ip import Locators
-from models.service import Service
+from models.base_service import BaseService
 
 
-class TwoIP(Service):
+class TwoIP(BaseService):
     name = '2ip'
 
     async def parse_data(self, locators, ip):

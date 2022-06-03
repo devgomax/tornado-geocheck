@@ -10,7 +10,7 @@ from utils import Utils
 from .data import IPModel
 
 
-class Service:
+class BaseService:
     __slots__ = 'timeout', 'backoff', 'only_country_code', 'browser', \
                 'context', 'page', 'tags_to_abort', 'user_agent', \
                 'dictionary', 'model', 'tries'

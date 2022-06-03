@@ -1,8 +1,8 @@
-from models.service import Service
+from models.base_service import BaseService
 from locators.ip2location import Locators
 
 
-class Ip2Location(Service):
+class Ip2Location(BaseService):
     name = 'ip2location'
 
     async def parse_data(self, locators):

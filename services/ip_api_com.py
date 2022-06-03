@@ -1,9 +1,9 @@
 import re
 
-from models.service import Service
+from models.base_service import BaseService
 
 
-class IP_API_Com(Service):
+class IP_API_Com(BaseService):
     name = 'ip_api_com'
 
     async def parse_data(self, data: dict):

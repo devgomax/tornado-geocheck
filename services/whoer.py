@@ -1,8 +1,8 @@
 from locators.whoer import Locators
-from models.service import Service
+from models.base_service import BaseService
 
 
-class Whoer(Service):
+class Whoer(BaseService):
     name = 'whoer'
 
     async def parse_data(self, locators, ip):
