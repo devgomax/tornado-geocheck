@@ -31,7 +31,6 @@ class GeoChecker:
         await self.exchange.publish(
             Message(
                 body=json.dumps(console_dict).encode(),
-                correlation_id=self.message.correlation_id,
                 content_type='application/json'
             ),
             routing_key=self.message.reply_to,
@@ -47,7 +46,7 @@ class GeoChecker:
         await self.exchange.publish(
             Message(
                 body='проверка завершена'.encode(),
-                correlation_id=self.message.correlation_id,
+                content_type='text/plain'
             ),
             routing_key=self.message.reply_to,
         )

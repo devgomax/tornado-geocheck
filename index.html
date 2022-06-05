@@ -9,7 +9,7 @@
     <button id="check" type="submit">Check</button>
     <br>
     <script>
-        ws = new WebSocket('ws://192.168.38.27:8888/socket');
+        ws = new WebSocket('ws://localhost:8888/socket');
         ws.onmessage = function (evt) {
             var block = document.createElement('div');
             block.textContent = evt.data;
